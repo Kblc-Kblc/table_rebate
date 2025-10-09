@@ -1,0 +1,1607 @@
+:root {
+  --bg: #f7f7f8;
+  --card: #ffffff;
+  --border: #e5e7eb;
+  --text: #0f172a;
+  --muted: #6b7280;
+  --primary: #111827;
+  --accent: #111827;
+  --radius: 12px;
+  --radius-sm: 10px;
+}
+
+* { box-sizing: border-box; }
+html, body { height: 100%; }
+body {
+  margin: 0;
+  font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial, "Noto Sans", "Apple Color Emoji", "Segoe UI Emoji";
+  color: var(--text);
+  background: var(--bg);
+}
+
+.app { height: 100vh; display: flex; flex-direction: column; }
+
+.topbar {
+  height: 64px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 24px;
+  background: #ffffff;
+  border-bottom: 1px solid var(--border);
+}
+.brand { display: flex; align-items: center; gap: 10px; }
+.logo { width: 28px; height: 28px; border-radius: 8px; background: #111827; color: #fff; display: grid; place-items: center; font-size: 14px; }
+.brand-name { font-weight: 700; letter-spacing: 0.2px; }
+.topbar-actions { display: flex; align-items: center; gap: 8px; }
+.icon-btn { border: 0; background: transparent; font-size: 18px; cursor: pointer; }
+
+.content { display: flex; justify-content: center; padding: 24px; flex: 1; overflow: hidden; }
+.card {
+  width: 1136px;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  overflow: hidden;
+}
+
+.card-header { margin-bottom: 12px; display: flex; align-items: flex-start; justify-content: space-between; gap: 16px; }
+.header-left { min-width: 0; }
+.header-right { display: flex; align-items: center; justify-content: flex-end; flex: 1; }
+.card-title { font-size: 22px; font-weight: 700; margin-bottom: 0; display: flex; align-items: center; gap: 8px; height: 32px; }
+.tooltip-container { position: relative; display: inline-flex; align-items: center; }
+.tooltip { color: #9ca3af; font-size: 16px; cursor: pointer; display: inline-flex; align-items: center; }
+.card-sub { color: var(--muted); font-size: 14px; margin-top: 12px; margin-bottom: 36px; display: flex; align-items: center; gap: 4px; }
+.arrow-8 svg { display: inline-block; vertical-align: middle; }
+.card-sub a { color: var(--text); font-weight: 600; text-decoration: none; }
+
+.tabs { display: flex; }
+.tabs-segmented { background: #f3f4f6; border: 1px solid var(--border); border-radius: 12px; padding: 2px; gap: 2px; }
+.tab { height: 40px; padding: 0 14px; border-radius: 10px; border: 0; background: transparent; color: var(--muted); cursor: pointer; font-weight: 600; }
+.tab.active { background: #ffffff; color: var(--text); box-shadow: 0 0 0 1px rgba(0,0,0,0.04) inset; }
+
+.filters {
+  display: grid;
+  grid-template-columns: 1.4fr 1.4fr 1fr 1fr 0.8fr;
+  gap: 12px;
+  padding: 16px 0 24px;
+}
+
+/* Стили для фильтров клиентов (первая вкладка) */
+.filters-clients {
+  display: grid;
+  grid-template-columns: 220px 250px 184px 184px 184px;
+  gap: 16px;
+  padding: 0;
+}
+
+/* Стили для фильтров во второй вкладке */
+.filters-operations {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  align-items: center;
+  align-content: flex-start;
+  padding: 0px;
+  gap: 16px;
+  width: 1086px;
+  height: 64px;
+  flex: none;
+  order: 1;
+  align-self: stretch;
+  flex-grow: 0;
+}
+
+/* Стили для фильтров операций - фиксированные ширины */
+.filters-operations .filter:nth-child(1) {
+  width: 220px; /* ID или торговый аккаунт */
+}
+
+.filters-operations .filter:nth-child(2) {
+  width: 250px; /* Период операций */
+}
+
+.filters-operations .filter:nth-child(3) {
+  width: 150px; /* Группы */
+}
+
+.filters-operations .filter:nth-child(4) {
+  width: 150px; /* Approval type */
+}
+
+.filters-operations .filter:nth-child(5) {
+  width: 150px; /* Status */
+}
+
+.filters-operations .filter:nth-child(6) {
+  width: 120px; /* Rebate % */
+}
+
+/* Стили для символа процента */
+.percent-symbol {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--muted);
+  font-size: 14px;
+  pointer-events: none;
+}
+.filter .label { font-size: 14px; font-weight: 400; color: rgba(0,0,0,0.5); margin-bottom: 8px; }
+.input, .select { height: 40px; border: 1px solid var(--border); border-radius: var(--radius-sm); display: flex; align-items: center; padding: 0 16px; background: #fff; }
+.input input { width: 100%; border: 0; outline: none; font-size: 14px; background: transparent; }
+.with-icon { position: relative; }
+.with-icon .left-icon { position: absolute; left: 12px; color: var(--muted); }
+.with-icon input { padding-left: 28px; }
+.input input::placeholder { color: rgba(0,0,0,0.25); }
+.date-input input[readonly][disabled]::placeholder { color: rgba(0,0,0,1); opacity: 1; }
+.date-input { padding: 0 16px; }
+.date-input input { padding-left: 0; }
+.with-icon.right .right-icon { position: absolute; right: 10px; color: var(--muted); }
+.icon svg { display: block; }
+.select { justify-content: space-between; font-weight: 400; font-size: 14px; }
+.select .chev { color: var(--muted); }
+
+/* контейнер таблицы */
+.rb-panel {
+  width: 1086px;
+  max-width: 1086px;
+  height: 100%;
+  overflow-x: hidden;
+  margin-top: 8px;
+
+  box-sizing: border-box;         /* важное */
+  padding-inline: 0;              /* важно - панель не должна иметь свои inline-padding */
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  border-radius: 12px;
+
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  background: #fff;
+  
+  /* Запрещаем выход контента за границы */
+  contain: layout;
+  min-width: 0;
+}
+
+/* один источник истины по колонкам - размеры рассчитываются динамически */
+.rb-panel {
+  --cols: 16px 96px 144px 104px 84px 108px 96px 96px 96px 96px; /* значения по умолчанию */
+}
+
+.rb-grid {
+  display: grid;
+  grid-template-columns: var(--cols);
+  column-gap: 13px;               /* расстояние между колонками */
+  align-items: center;
+  padding-inline: 16px;           /* добавляем горизонтальные падинги для rb-grid */
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+}
+
+/* убираем горизонтальные паддинги у шапки/строк/футера */
+.rb-head {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  padding: 16px 16px;             /* паддинги по 16px у шапки */
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+  border-radius: 12px 12px 0 0;
+  background: #fff;
+  font-weight: 400;               /* Inter Regular */
+  font-size: 14px;                /* 14 пикселей */
+  color: rgba(0, 0, 0, 0.5);     /* 50% прозрачности */
+  font-family: 'Inter', sans-serif;
+}
+
+.rb-head .rb-grid {
+  height: 56px;                   /* высота заголовка таблицы */
+}
+
+/* Скроллим только строки */
+.rb-body {
+  overflow-y: auto;
+  contain: content;
+}
+
+.rb-row {
+  min-height: 56px;
+  padding: 12px 16px;             /* паддинги по 16px у строк */
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+  font-family: 'Inter', sans-serif;
+  font-weight: 400;               /* Inter Regular */
+  font-size: 14px;                 /* 14 пикселей */
+}
+
+/* Футер всегда прижат к низу */
+.rb-foot {
+  padding: 16px 16px;             /* паддинги по 16px у футера */
+  padding-left: 16px;             /* паддинг слева 16px */
+  padding-right: 16px;           /* паддинг справа 16px */
+  border-top: 1px solid rgba(0, 0, 0, 0.1);
+  border-radius: 0px 0px 12px 12px;
+  background: #fff;
+  font-family: 'Inter', sans-serif;
+  font-weight: 400;               /* Inter Regular */
+  font-size: 14px;                 /* 14 пикселей */
+  align-items: center;            /* все в одной линии по вертикали */
+  height: 72px;                  /* высота последней строчки 72px */
+}
+
+/* 1) Грид футера всегда укладывается внутрь панели */
+.rb-foot.rb-grid {
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* 2) Базово: ячейки футера не могут расширяться шире своей колонки */
+.rb-foot .cell {
+  max-width: 100%;
+  min-width: 0;
+  overflow-wrap: anywhere;  /* переносить длинные слова/фразы */
+  word-break: break-word;
+  white-space: normal;      /* разрешаем переносы */
+  overflow: hidden;         /* не выходим за правый край */
+  text-overflow: clip;      /* убираем многоточие */
+  line-height: 22px;        /* как в строках таблицы */
+}
+
+/* 3) Объединяем правые тексты в один контейнер */
+.rb-foot .sum-totals { 
+  grid-column: 5 / -1;  /* занимает колонки 5-8 до края панели */
+  display: flex;
+  align-items: center;
+  white-space: nowrap;
+  overflow: visible;
+  text-overflow: clip;
+  width: fit-content;    /* ширина по контенту */
+  justify-self: end;    /* прижать к правому краю */
+}
+
+/* 4) Стили для span элементов внутри объединенного контейнера */
+.rb-foot .sum-totals span {
+  display: inline-block;
+  white-space: nowrap;
+  margin-left: 24px;              /* расстояние между текстами 24px */
+}
+
+.rb-foot .sum-totals span:first-child {
+  margin-left: 0;                 /* первый элемент без отступа */
+}
+
+/* 5) На всякий случай убираем ограничения у вложенных span/b */
+.rb-foot .sum-totals > * {
+  min-width: 0;
+  display: inline-block;
+  vertical-align: middle;
+}
+
+/* 6) Число с валютой — тоже без переноса */
+.nowrap { 
+  white-space: nowrap; 
+}
+
+.rb-foot .sum-totals b { 
+  white-space: nowrap; 
+}
+
+/* Стили кнопки в футере */
+.rebate-btn {
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  padding: 8px 32px;
+  gap: 8px;
+  width: 426px;
+  height: 40px;
+  background: rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  font-family: 'Inter', sans-serif;
+  font-size: 14px;
+  font-weight: 400;
+  color: #000;
+}
+
+.rebate-btn svg {
+  flex-shrink: 0;
+  width: 16px;
+  height: 16px;
+}
+
+/* Tooltip icon near account number */
+.js-account-info,
+.js-auto-info,
+.rb-info-btn {
+  appearance: none;
+  -webkit-appearance: none;
+  background: transparent !important;
+  border: 0 !important;
+  box-shadow: none !important;
+  padding: 0 !important;
+  margin-left: 6px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 18px;   /* можно 16px, если иконка меньше */
+  height: 18px;
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+/* SVG внутри иконки — серый, как на макете */
+.js-account-info svg,
+.js-auto-info svg,
+.rb-info-btn svg {
+  display: block;
+  width: 16px;
+  height: 16px;
+  opacity: .6;              /* визуально «серая» иконка */
+}
+
+/* Hover/active — лёгкое затемнение, без подложки */
+.js-account-info:hover svg,
+.js-auto-info:hover svg,
+.rb-info-btn:hover svg { opacity: .8; }
+.js-account-info:active svg,
+.js-auto-info:active svg,
+.rb-info-btn:active svg { opacity: 1; }
+
+/* Доступность: видимая рамка только при клавиатурном фокусе */
+.js-account-info:focus-visible,
+.js-auto-info:focus-visible,
+.rb-info-btn:focus-visible {
+  outline: 2px solid rgba(0,0,0,.25);
+  outline-offset: 2px;
+}
+
+/* Выравнивание номера аккаунта и иконки по центру */
+.account-number {
+  display: inline-flex;
+  align-items: center;
+  vertical-align: middle;
+  width: 70px;
+}
+
+.js-account-info {
+  vertical-align: middle;
+}
+
+/* Modal styles */
+.rb-modal { position: fixed; inset: 0; z-index: 10000; }
+.rb-modal__backdrop { position: absolute; inset: 0; background: rgba(0,0,0,.45); }
+.rb-modal__dialog {
+  position: absolute; left: 50%; top: 50%; transform: translate(-50%,-50%);
+  width: 480px; background: #fff; border-radius: 12px;
+  box-shadow: 0 12px 32px rgba(0,0,0,.2); padding: 20px 24px 16px; outline: none;
+}
+.rb-modal__close {
+  position: absolute; right: 12px; top: 12px; border: 0; background: none; cursor: pointer;
+  width: 28px; height: 28px; border-radius: 6px;
+}
+.rb-modal__title { 
+  margin: 0 32px 32px 0; 
+  font-family: 'Inter', sans-serif;
+  font-size: 20px; 
+  font-weight: 600; 
+}
+.rb-modal__body { display: grid; gap: 16px; }
+.rb-field { display: grid; gap: 6px; }
+
+/* Override gap for period field */
+#period-field {
+  gap: 6px;
+}
+
+#period-field .rb-label {
+  margin-bottom: 6px !important;
+}
+.rb-label { font-size: 14px; color: rgba(0, 0, 0, 0.5); }
+/* Percent input styles */
+#rbm-percent {
+  height: 40px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  display: flex;
+  align-items: center;
+  padding: 0 16px;
+  background: #fff;
+  width: 100%;
+  cursor: text;
+}
+
+#rbm-percent input {
+  width: 100%;
+  border: none;
+  outline: none;
+  background: transparent;
+  font-size: 14px;
+  font-weight: 400;
+  color: #000;
+}
+
+#rbm-percent input::placeholder {
+  color: rgba(0, 0, 0, 0.25);
+}
+
+#rbm-percent:focus-within {
+  border-color: #007bff;
+  box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.25);
+}
+
+/* Dropdown select styles */
+#rbm-type {
+  height: 40px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  display: flex;
+  align-items: center;
+  padding: 0 16px;
+  background: #fff;
+  justify-content: space-between;
+  font-weight: 400;
+  font-size: 14px;
+  width: 100%;
+  cursor: pointer;
+}
+
+#rbm-type .chev {
+  color: var(--muted);
+}
+
+/* Period field styles */
+#rbm-period {
+  height: 40px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  display: flex;
+  align-items: center;
+  padding: 0 16px;
+  background: #fff;
+  justify-content: space-between;
+  font-weight: 400;
+  font-size: 14px;
+  width: 100%;
+  cursor: pointer;
+}
+
+#rbm-period .chev {
+  color: var(--muted);
+}
+
+.period-info {
+  margin-top: 8px;
+  font-family: 'Inter', sans-serif;
+  font-size: 11px;
+  font-weight: 400;
+  color: rgba(0, 0, 0, 0.3);
+  line-height: 1.4;
+}
+
+/* Dropdown menu styles */
+.dropdown-menu {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background: #fff;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  z-index: 1000;
+  margin-top: 4px;
+}
+
+.dropdown-option {
+  padding: 12px 16px;
+  cursor: pointer;
+  font-size: 14px;
+  color: #000;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.dropdown-option:last-child {
+  border-bottom: none;
+}
+
+.dropdown-option:hover {
+  background: rgba(0, 0, 0, 0.05);
+}
+
+.dropdown-option.selected {
+  background: rgba(0, 0, 0, 0.1);
+  font-weight: 500;
+}
+
+/* Position relative for dropdown */
+.rb-field {
+  position: relative;
+}
+
+.rb-note { margin: 8px 0 0; font-size: 12px; color: #777; text-align: center; }
+.rb-modal__footer { display: flex; justify-content: center; padding-top: 24px; }
+.btn.btn-primary { height: 40px; padding: 0 16px; border-radius: 8px; background: #111; color: #fff; border: 1px solid #111; cursor: pointer; }
+
+/* Стили для кнопок массовых операций в футере */
+#approve-selected-btn {
+  width: 160px;
+  height: 40px;
+  padding: 0 16px;
+  border-radius: 8px;
+  background: rgba(0, 0, 0, 0.1);
+  color: #000;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+#approve-selected-btn::before {
+  content: '';
+  width: 16px;
+  height: 16px;
+  background-image: url("data:image/svg+xml,%3Csvg width='16' height='16' viewBox='0 0 16 16' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M3.33203 8.66699L5.9987 11.3337L12.6654 4.66699' stroke='black' stroke-width='1.25' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;
+  display: inline-block;
+  flex-shrink: 0;
+}
+
+#reject-selected-btn {
+  width: 160px;
+  height: 40px;
+  padding: 0 16px;
+  border-radius: 8px;
+  background: #fff;
+  color: #000;
+  border: 1px solid #C6C6C6;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+#reject-selected-btn::before {
+  content: '';
+  width: 16px;
+  height: 16px;
+  background-image: url("data:image/svg+xml,%3Csvg width='16' height='16' viewBox='0 0 16 16' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M4 12L12 4M4 4L12 12' stroke='black' stroke-width='1.25' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;
+  display: inline-block;
+  flex-shrink: 0;
+}
+
+#set-pending-btn {
+  width: 160px;
+  height: 40px;
+  padding: 0 16px;
+  border-radius: 8px;
+  background: #fff;
+  color: #000;
+  border: 1px solid #C6C6C6;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+#set-pending-btn::before {
+  content: '';
+  width: 16px;
+  height: 16px;
+  background-image: url("data:image/svg+xml,%3Csvg width='16' height='16' viewBox='0 0 16 16' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M8 1C9.38438 1 10.7376 1.41062 11.8887 2.17969C13.0398 2.94884 13.937 4.04223 14.4668 5.32129C14.9966 6.60027 15.1352 8.00747 14.8652 9.36523C14.5951 10.7231 13.9292 11.9712 12.9502 12.9502C11.9712 13.9292 10.7231 14.5951 9.36523 14.8652C8.00747 15.1352 6.60027 14.9966 5.32129 14.4668C4.04223 13.937 2.94884 13.0398 2.17969 11.8887C1.41062 10.7376 1 9.38438 1 8C1 7.58579 1.33579 7.25 1.75 7.25C2.16421 7.25 2.5 7.58579 2.5 8C2.5 9.08778 2.82243 10.1512 3.42676 11.0557C4.03111 11.9601 4.89051 12.6648 5.89551 13.0811C6.90047 13.4973 8.00639 13.6067 9.07324 13.3945C10.1401 13.1823 11.1195 12.6578 11.8887 11.8887C12.6578 11.1195 13.1823 10.1401 13.3945 9.07324C13.6067 8.00639 13.4973 6.90047 13.0811 5.89551C12.6648 4.89051 11.9601 4.03111 11.0557 3.42676C10.1512 2.82243 9.08778 2.5 8 2.5C7.58579 2.5 7.25 2.16421 7.25 1.75C7.25 1.33579 7.58579 1 8 1Z' fill='%23161616'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;
+  display: inline-block;
+  flex-shrink: 0;
+}
+
+/* Контейнер для кнопок массовых операций в футере */
+#footer-button {
+  display: flex;
+  gap: 16px;
+  align-items: center;
+}
+
+/* Ширина контейнера статистики в футере */
+.cell#footer-stats {
+  width: 200px !important;
+  min-width: 200px;
+  max-width: 200px;
+}
+
+/* Time picker styles */
+.rb-timepop {
+  position: fixed; z-index: 10001;
+  width: 100%; background: #fff; border-radius: 12px;
+  box-shadow: 0 12px 24px rgba(0,0,0,.18);
+  padding: 8px; display: none;
+  font: inherit; color: #111;
+}
+.rb-timepop__head { display:flex; gap:6px; flex-wrap:wrap; padding: 6px 6px 2px; }
+.rb-timepop__times { display:flex; gap:6px; flex-wrap:wrap; padding: 6px 6px 2px; }
+.rb-chip {
+  padding:6px 10px; border:1px solid rgba(0,0,0,.15);
+  border-radius: 999px; background:#fff; cursor:pointer;
+  font-size:12px; line-height:1;
+}
+.rb-timepop__grid {
+  max-height: 240px; overflow:auto; margin-top: 6px;
+  border:1px solid rgba(0,0,0,.08); border-radius: 8px;
+}
+.rb-timeopt { display:flex; align-items:center; height:36px; padding:0 10px; cursor:pointer; }
+.rb-timeopt:hover { background: rgba(0,0,0,.05); }
+.rb-timepop__foot { display:flex; justify-content:space-between; align-items:center; padding:8px 2px 2px; }
+.rb-timepop__foot .rb-btn + .rb-btn { margin-left: 16px; }
+.rb-time-inp {
+  width: 92px; height: 32px; border:1px solid rgba(0,0,0,.15);
+  border-radius: 8px; padding:0 8px; font-variant-numeric: tabular-nums;
+}
+.rb-btn { height:32px; padding:0 12px; border-radius:8px; border:1px solid rgba(0,0,0,.15); background:#fff; cursor:pointer; }
+.rb-btn--primary { background:#111; color:#fff; border-color:#111; }
+.rb-time-inp.invalid { border-color:#E5484D; }
+
+.rb-input {
+  width: 100%;
+  border: none;
+  outline: none;
+  background: transparent;
+  font-size: 14px;
+  font-weight: 400;
+  color: #000;
+}
+
+.rb-time-icon {
+  color: var(--muted);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Time picker dropdown styles */
+.tp-dropdown{ 
+  position: fixed !important; 
+  z-index: 10001 !important; 
+  margin: 0 !important;
+  padding: 0 !important;
+}
+.tp-dialog{ 
+  width: 100%; 
+  background:#fff; 
+  border-radius:12px; 
+  box-shadow:0 20px 48px rgba(0,0,0,.28); 
+  padding:16px 16px 12px; 
+}
+.tp-title-row{ display:flex; justify-content:space-between; align-items:center; margin-bottom:12px; }
+.tp-title{ margin:0; font-weight:700; font-size:18px; }
+.tp-format-chips{ display:flex; gap:4px; }
+.tp-chip{ 
+  padding:4px 8px; 
+  border:1px solid rgba(0,0,0,.15); 
+  border-radius:6px; 
+  background:#fff; 
+  cursor:pointer; 
+  font-size:12px; 
+  font-weight:500;
+  transition: all 0.2s ease;
+}
+.tp-chip--active{ 
+  background:#111; 
+  color:#fff; 
+  border-color:#111; 
+}
+.tp-chip:hover:not(.tp-chip--active){ 
+  background:rgba(0,0,0,.05); 
+}
+.tp-wheels{ display:grid; grid-template-columns: 1fr auto 1fr; gap:12px; align-items:center; padding:6px 4px 10px; }
+.wheel{ 
+  position:relative; 
+  height:220px; 
+  overflow-y:auto; 
+  overflow-x:hidden;
+  scroll-snap-type:y mandatory; 
+  border-radius:12px; 
+  background:#fff; 
+  mask-image:linear-gradient(to bottom,transparent 0%,black 12%,black 88%,transparent 100%); 
+  -webkit-mask-image:linear-gradient(to bottom,transparent 0%,black 12%,black 88%,transparent 100%); 
+  scrollbar-width:none; 
+  -ms-overflow-style:none; 
+}
+.wheel::-webkit-scrollbar{ width:0; height:0; display:none; }
+.wheel .item{ height:44px; display:flex; align-items:center; justify-content:center; font-variant-numeric:tabular-nums; font-size:18px; scroll-snap-align:center; }
+.selector{ position:absolute; left:6px; right:6px; top:calc(50% - 22px); height:44px; border-radius:10px; box-shadow:inset 0 0 0 1px rgba(0,0,0,.12); pointer-events:none; }
+.tp-footer{ display:flex; justify-content:flex-end; gap:8px; padding:6px 4px 2px; }
+.tp-footer .tp-inp,
+.tp-footer .tp-btn {
+  width: 120px;
+  flex-shrink: 0;
+}
+.tp-inp{ height:40px; border:1px solid rgba(0,0,0,.15); border-radius:10px; padding:0 12px; text-align:center; font-variant-numeric:tabular-nums; font-size:16px; width:120px; }
+.tp-btn{ height:40px; padding:0 14px; border-radius:10px; border:1px solid rgba(0,0,0,.15); background:#fff; cursor:pointer; }
+.tp-btn--primary{ background:#111; color:#fff; border-color:#111; }
+.colon{ font-size:32px; font-weight:700; }
+
+/* Week chips (mini calendar) */
+.week-chips{
+  display:flex; gap:6px; justify-content:center; align-items:center;
+  padding:6px 0 2px;
+}
+.chip{
+  min-width:48px; height:36px; padding:0 12px; border-radius:8px;
+  border:1px solid rgba(0,0,0,.12); background:#f5f5f5; color:#000;
+  display:flex; align-items:center; justify-content:center;
+  font-weight:500; letter-spacing:.02em; cursor:pointer; user-select:none;
+  transition: all 0.2s ease;
+}
+.chip.is-active{
+  background:#d5d5d5; color:#000000; border-color:#d5d5d5;
+}
+.chip:focus-visible{ outline:2px solid #bcd3ff; outline-offset:2px; }
+
+
+
+
+
+
+/* Ячейки */
+.cell {
+  min-width: 0;
+  max-width: 100%;
+  width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  text-align: left;
+  box-sizing: border-box;
+}
+
+.cell--chk {
+  width: 27px;
+  height: 16px;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.cell--chk input[type="checkbox"] {
+  width: 16px;
+  height: 16px;
+  margin: 0;
+  padding: 0;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 2;
+  opacity: 1;
+}
+
+.cell--chk .checkbox-icon {
+  width: 16px;
+  height: 16px;
+  display: block;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 1;
+  pointer-events: none;
+}
+
+/* Неактивное состояние чекбокса - стили уже в SVG */
+
+/* Активное состояние чекбокса */
+.cell--chk.checked .checkbox-icon rect {
+  fill: rgba(0, 0, 0, 0.1);
+  stroke: black;
+  stroke-opacity: 1;
+}
+
+.cell--chk.checked .checkbox-icon .checkmark {
+  display: block;
+}
+
+.cell--chk .checkbox-icon .checkmark {
+  display: none;
+}
+
+.cell--num {
+  text-align: left;
+  font-variant-numeric: tabular-nums;
+}
+
+.cell--action {
+  text-align: center;        /* выравнивание по центру */
+  min-width: 0;
+}
+
+/* Специально для заголовка "Action" */
+.rb-head .cell--action {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.cell--span-2 {
+  grid-column: span 2;
+}
+
+.muted {
+  opacity: 0.5;
+}
+
+.rb-head .cell--sortable {
+  display: flex;
+  align-items: center;
+  gap: 0;                        /* убираем gap между текстом и иконкой сортировки */
+  cursor: pointer;
+}
+
+.sort-icon {
+  display: inline-flex;
+  flex: 0 0 auto;
+}
+
+/* кнопка не должна вылазить */
+.cell--action .btn {
+  max-width: 100%;
+  width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  box-sizing: border-box;
+}
+
+/* Кнопка без бордера для состояния "..." */
+.cell--action .btn.no-border {
+  border: none;
+  background: transparent;
+}
+
+/* Контекстное меню */
+.context-menu {
+  position: fixed;
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  padding: 8px 0;
+  z-index: 10000;
+  min-width: 200px;
+  border: 1px solid #e5e5e5;
+  max-width: 250px;
+  overflow: hidden;
+}
+
+.context-menu-item {
+  padding: 12px 16px;
+  cursor: pointer;
+  font-size: 14px;
+  color: #161616;
+  transition: background-color 0.2s ease;
+}
+
+.context-menu-item:hover {
+  background-color: #f5f5f5;
+}
+
+.context-menu-item:first-child {
+  border-radius: 8px 8px 0 0;
+}
+
+.context-menu-item:last-child {
+  border-radius: 0 0 8px 8px;
+}
+
+/* Дополнительные ограничения для всех элементов внутри rb-panel */
+.rb-panel * {
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
+.rb-panel .rb-grid {
+  overflow: hidden;
+}
+
+.rb-panel .rb-row {
+  overflow: hidden;
+}
+
+/* на всякий случай убираем side-padding у внутренних grid-блоков */
+
+/* отключаем горизонтальные псевдолинии, которые могут добавлять ширину */
+.rb-grid::before, .rb-grid::after {
+  content: none !important;
+}
+
+/* Сбрасываем фигмовские артефакты (absolute/flex с позиционированием) */
+.rb-panel * {
+  /* position: static !important; */
+  /* flex/grid будут установлены выше где нужно */
+  box-sizing: border-box;
+}
+
+.sortable {
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.sort-icon { 
+  display: inline-flex; 
+  vertical-align: middle; 
+  margin-left: 6px; 
+  width: 16px; 
+  height: 16px; 
+  opacity: 0.5; 
+  transition: transform 0.2s; 
+}
+
+.sortable[data-sorted="asc"] .sort-icon { transform: rotate(180deg); }
+.sortable[data-sorted="desc"] .sort-icon { transform: rotate(0deg); }
+
+/* Muted elements */
+.table.rebate-table .muted { 
+  color: #000000; 
+  opacity: 0.25; 
+}
+
+/* Button styles */
+.btn { 
+  width: 142px;
+  height: 32px; 
+  padding: 0 16px; 
+  border-radius: 8px; 
+  border: 1px solid #C6C6C6; 
+  background: #fff; 
+  cursor: pointer; 
+  font-size: 12px; 
+  font-weight: 400; 
+  color: #161616; 
+  white-space: nowrap;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Inter', sans-serif;
+  margin: 0 auto;
+}
+
+/* Row selection */
+.row-selected { 
+  background: #f9fafb; 
+}
+
+/* Account with icon */
+.account-with-icon { 
+  display: inline-flex; 
+  align-items: center; 
+  gap: 6px; 
+}
+
+.badge-note { 
+  color: var(--muted); 
+  font-size: 12px; 
+  display: inline-flex; 
+  align-items: center; 
+}
+/* Table Header Row - Figma Spec */
+.table-header-row {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding: 16px;
+  gap: 16px;
+  width: 1084px;
+  height: 56px;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  border-radius: 12px 12px 0px 0px;
+  box-sizing: border-box;
+}
+
+.table thead th { 
+  background: transparent; 
+  text-align: left; 
+  font-weight: 400; 
+  font-size: 14px; 
+  line-height: 20px; 
+  color: rgba(0,0,0,0.5); 
+  padding: 0; 
+  border: none; 
+  white-space: nowrap; 
+  height: 20px; 
+  vertical-align: middle; 
+  display: flex;
+  align-items: center;
+}
+/* Header cell widths according to Figma */
+.table thead th:nth-child(1) { width: 16px; } /* Checkbox */
+.table thead th:nth-child(2) { width: 120px; } /* Client */
+.table thead th:nth-child(3) { width: 180px; } /* Trading account */
+.table thead th:nth-child(4) { width: 100px; text-align: left; } /* IB Profit */
+.table thead th:nth-child(5) { width: 140px; } /* Approval type */
+.table thead th:nth-child(6) { width: 120px; } /* Rebate % */
+.table thead th:nth-child(7) { width: 140px; text-align: left; } /* Paid */
+.table thead th:nth-child(8) { width: 142px; text-align: center; } /* Action */
+/* Table Body Rows - Figma Spec */
+.table tbody tr { 
+  display: flex; 
+  flex-direction: row; 
+  align-items: center; 
+  padding: 20px 16px; 
+  gap: 16px; 
+  width: 1084px; 
+  height: 56px; 
+  border-width: 0px 1px 1px 1px; 
+  border-style: solid; 
+  border-color: rgba(0, 0, 0, 0.1); 
+  box-sizing: border-box; 
+}
+
+/* Specific gap between checkbox and client names */
+.table tbody tr > td:nth-child(1) + td:nth-child(2) {
+  margin-left: 16px;
+}
+
+/* Specific gap between checkbox and "Client" header */
+.table-header-row > th:nth-child(1) + th:nth-child(2) {
+  margin-left: 16px;
+}
+
+.table tbody td { 
+  padding: 0; 
+  border: none; 
+  font-size: 14px; 
+  white-space: nowrap; 
+  vertical-align: middle; 
+  text-align: left; 
+  display: flex; 
+  align-items: center; 
+  font-family: 'Inter'; 
+  font-style: normal; 
+  font-weight: 400; 
+  font-size: 14px; 
+  line-height: 22px; 
+  color: #000000; 
+  height: 22px; 
+}
+
+/* Body cell widths according to Figma */
+.table tbody td:nth-child(1) { width: 16px; justify-content: center; } /* Checkbox */
+.table tbody td:nth-child(2) { width: 128px; } /* Client */
+.table tbody td:nth-child(3) { width: 180px; } /* Trading account */
+.table tbody td:nth-child(4) { flex: 1; min-width: 143.5px; } /* IB Profit */
+.table tbody td:nth-child(5) { flex: 1; min-width: 143.5px; } /* Approval type */
+.table tbody td:nth-child(6) { flex: 1; min-width: 143.5px; } /* Rebate % */
+.table tbody td:nth-child(7) { flex: 1; min-width: 143.5px; } /* Paid */
+.table tbody td:nth-child(8) { width: 142px; justify-content: center; } /* Action */
+.table tbody tr:hover { background: #fcfcfc; }
+/* Checkbox styles */
+input[type="checkbox"] {
+  width: 16px;
+  height: 16px;
+  min-width: 16px;
+  min-height: 16px;
+  max-width: 16px;
+  max-height: 16px;
+  appearance: none;
+  -webkit-appearance: none;
+  outline: none;
+  border: 1px solid rgba(0, 0, 0, 0.15);
+  border-radius: 4px;
+  background-color: #fff;
+  display: inline-block;
+  flex-shrink: 0;
+}
+
+input[type="checkbox"]:checked {
+  border-color: rgba(0,0,0,0.1);
+  background-color: transparent;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 16 16' fill='none'%3E%3Crect width='16' height='16' rx='4' fill='black' fill-opacity='0.1'/%3E%3Cpath d='M3.33203 8.66699L5.9987 11.3337L12.6654 4.66699' stroke='black' stroke-width='1.25' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+/* Sort icon */
+.sort-icon { 
+  display: inline-flex; 
+  vertical-align: middle; 
+  margin-left: 6px; 
+  opacity: 0.5; 
+  transition: transform 0.2s; 
+}
+
+.header-cell[data-sorted="asc"] .sort-icon { 
+  transform: rotate(180deg); 
+}
+
+.header-cell[data-sorted="desc"] .sort-icon { 
+  transform: rotate(0deg); 
+}
+
+/* Row highlight when selected via master checkbox */
+.row-selected { 
+  background: #f9fafb; 
+}
+
+.w-32 { width: 32px; padding-right: 16px; }
+.actions-col { width: 142px; text-align: center; }
+/* Force action column and button width */
+.table tbody td:last-child { width: 142px; }
+th.sortable { position: relative; }
+/* Sort icon styles according to Figma */
+.sort-icon { 
+  display: inline-flex; 
+  vertical-align: middle; 
+  margin-left: 6px; 
+  width: 16px; 
+  height: 16px; 
+  opacity: 0.5; 
+}
+th.sortable[data-sorted="asc"] .sort-icon { transform: rotate(180deg); }
+th.sortable[data-sorted="desc"] .sort-icon { transform: rotate(0deg); }
+
+/* Sortable header cells with flex layout */
+th.sortable {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 8px;
+}
+
+.account-with-icon { display: inline-flex; align-items: center; gap: 6px; }
+.badge-note { color: var(--muted); font-size: 12px; display: inline-flex; align-items: center; }
+.btn.primary { background: #111827; color: #fff; border-color: #111827; }
+
+.table-footer { display: flex; gap: 16px; align-items: center; padding: 0 14px; height: 72px; background: transparent; border-top: 1px solid var(--border); font-size: 14px; color: rgba(17,24,39,0.5); margin-top: auto; }
+.table-footer b { color: #111827; font-weight: 400; }
+.table-footer .muted { color: rgba(17,24,39,0.5); margin-left: 6px; }
+.spacer { flex: 1; }
+
+.muted { color: var(--muted); }
+.table td.muted { 
+  color: #000000; 
+  opacity: 0.25; 
+}
+
+/* Info tooltip */
+.info-tooltip { 
+  position: absolute; 
+  width: 352px; 
+  height: auto; 
+  left: -168px; 
+  top: calc(100% + 8px); 
+  background: #ffffff; 
+  border: 1px solid var(--border); 
+  border-radius: 12px; 
+  box-shadow: 0 10px 30px rgba(0,0,0,0.1); 
+  display: none; 
+  z-index: 1000; 
+}
+
+.info-tooltip::before {
+  content: '';
+  position: absolute;
+  top: -8px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 0;
+  height: 0;
+  border-left: 8px solid transparent;
+  border-right: 8px solid transparent;
+  border-bottom: 8px solid #ffffff;
+}
+
+.info-tooltip::after {
+  content: '';
+  position: absolute;
+  top: -9px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 0;
+  height: 0;
+  border-left: 9px solid transparent;
+  border-right: 9px solid transparent;
+  border-bottom: 9px solid var(--border);
+}
+.info-tooltip__content { padding: 20px 20px 28px 20px; font-size: 14px; color: #111827; line-height: 1.5; }
+.info-tooltip__title { font-weight: 600; font-size: 16px; margin-bottom: 12px; color: #111827; }
+.info-tooltip p { margin: 0 0 12px 0; color: #6b7280; font-weight: 400; font-size: 14px; }
+.info-tooltip p .bold-text { font-weight: 700; }
+.info-tooltip__link { color: rgba(0,0,0,0.5); font-weight: 400; text-decoration: none; display: inline-flex; align-items: center; gap: 8px; margin-top: 8px; }
+.info-tooltip__link:hover { text-decoration: underline; }
+.info-tooltip.show { display: block !important; }
+
+@media (max-width: 1200px) {
+  .card { width: 100%; }
+  .filters { grid-template-columns: 1fr 1fr; }
+}
+
+/* Стили для обновленных ячеек таблицы */
+.cell-updated {
+  color: #000000 !important;
+  opacity: 1 !important;
+}
+
+/* Выравнивание текста "Auto" и иконки тултипа по центру */
+.cell {
+  display: flex;
+  align-items: center;
+}
+
+.cell .rebate-info-icon {
+  display: inline-flex;
+  align-items: center;
+  margin-left: 4px;
+}
+
+/* Стили для календаря (месячный режим) */
+.calendar-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 8px;
+  padding: 16px;
+  max-width: 400px;
+}
+
+.calendar-day {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 500;
+  color: #000;
+  background: #f5f5f5;
+  transition: all 0.2s ease;
+  user-select: none;
+}
+
+
+.calendar-day:hover:not(.disabled) {
+  background: #e0e0e0;
+  transform: scale(1.05);
+}
+
+.calendar-day.selected {
+  background: #d5d5d5;
+  color: #000000;
+  transform: scale(1.1);
+}
+
+.calendar-day.selected:hover {
+  background: #c5c5c5;
+  transform: scale(1.15);
+}
+
+.calendar-day.disabled {
+  color: #999;
+  background: #f9f9f9;
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+/* Стили для кнопки "Обновить на текущее" в календаре */
+[data-act="now-calendar"] {
+  white-space: normal;
+  line-height: 1.2;
+  text-align: center;
+  padding: 8px 12px;
+}
+
+/* Стили для поля ввода времени в календаре */
+#calendar-time-input {
+  width: 120px;
+  flex-shrink: 0;
+}
+
+/* ===== ЕДИНЫЕ СТИЛИ ДЛЯ DROPDOWN'ОВ ===== */
+
+/* Базовые стили для всех dropdown'ов */
+.tp-dropdown {
+  position: fixed !important;
+  z-index: 99999 !important;
+  display: none !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  background: white !important;
+  border: none !important;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15) !important;
+  width: 432px !important;
+  left: 25px !important;
+  top: 224px !important;
+}
+
+/* Стили для активного состояния dropdown */
+.tp-dropdown.active {
+  display: block !important;
+}
+
+/* Стили для чипсов дней недели */
+.chip {
+  background: #f5f5f5 !important;
+  color: #000 !important;
+  border-color: rgba(0,0,0,.12) !important;
+  transition: all 0.2s ease !important;
+  border-radius: 8px !important;
+}
+
+.chip.is-active {
+  background: #d5d5d5 !important;
+  color: #000000 !important;
+  border-color: #d5d5d5 !important;
+}
+
+/* Стили для кнопки очистки поиска */
+.clear-search {
+  position: absolute;
+  right: 8px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: #f5f5f5;
+  border: 1px solid #ddd;
+  border-radius: 50%;
+  width: 20px;
+  height: 20px;
+  font-size: 14px;
+  cursor: pointer;
+  color: #666;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 10;
+}
+
+.clear-search:hover {
+  background: #e0e0e0;
+  color: #333;
+}
+
+/* Стили для контейнера поиска */
+.input {
+  position: relative;
+}
+
+/* Стили для отступов колес */
+.wheel .item {
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-variant-numeric: tabular-nums;
+  font-size: 18px;
+  scroll-snap-align: center;
+}
+
+/* Стили для селектора колес */
+.selector {
+  position: absolute;
+  left: 6px;
+  right: 6px;
+  top: calc(50% - 22px);
+  height: 44px;
+  border-radius: 10px;
+  box-shadow: inset 0 0 0 1px rgba(0,0,0,.12);
+  pointer-events: none;
+}
+
+/* Стили для календаря */
+.calendar-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 4px;
+  padding: 16px;
+}
+
+.calendar-day {
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 500;
+  transition: all 0.2s ease;
+  border: 1px solid transparent;
+}
+
+
+.calendar-day:hover:not(.disabled) {
+  background: #f3f4f6;
+  transform: scale(1.05);
+}
+
+.calendar-day.selected {
+  background: #d5d5d5;
+  color: #000000;
+  transform: scale(1.1);
+}
+
+.calendar-day.selected:hover {
+  background: #c5c5c5;
+  transform: scale(1.15);
+}
+
+.calendar-day.disabled {
+  color: #d1d5db;
+  cursor: not-allowed;
+  background: #f9fafb;
+}
+
+/* Стили для заголовка календаря */
+.tp-title-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.tp-title {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 600;
+  color: #111827;
+}
+
+/* Стили для футера календаря */
+.tp-footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  padding: 16px;
+  border-top: 1px solid #e5e7eb;
+}
+
+/* Стили для кнопок календаря */
+.tp-btn {
+  height: 40px;
+  padding: 0 14px;
+  border-radius: 10px;
+  border: 1px solid rgba(0,0,0,.15);
+  background: #fff;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 500;
+  transition: all 0.2s ease;
+}
+
+.tp-btn:hover {
+  background: #f9fafb;
+}
+
+.tp-btn--primary {
+  background: rgb(17, 17, 17);
+  color: white;
+  border-color: rgb(17, 17, 17);
+}
+
+.tp-btn--primary:hover {
+  background: rgb(34, 34, 34);
+}
+
+/* Стили для поля ввода времени */
+.tp-inp {
+  height: 40px;
+  border: 1px solid rgba(0,0,0,.15);
+  border-radius: 10px;
+  padding: 0 12px;
+  text-align: center;
+  font-variant-numeric: tabular-nums;
+  font-size: 16px;
+  width: 120px;
+}
+
+.tp-inp:focus {
+  outline: none;
+  border-color: #185adb;
+  box-shadow: 0 0 0 3px rgba(24, 90, 219, 0.1);
+}
+
+/* Стиль для текста "0 USD" с 50% прозрачностью */
+.zero-amount {
+  opacity: 0.5;
+  color: #6b7280;
+}
+
+/* Стиль для текста "0 USD" с полной прозрачностью (когда ребейт настроен) */
+.zero-amount-transparent {
+  opacity: 0;
+  color: #6b7280;
+}
+
+/* Стили для статуса в таблице операций */
+.status-badge {
+  display: inline-block;
+  padding: 4px;
+  border-radius: 4px;
+  border: 1px solid #000000;
+  font-size: 12px;
+  font-weight: 500;
+  color: #000000;
+  background-color: transparent;
+}
+
+/* Специальный стиль для статуса "Approved" с прозрачностью 50% */
+.status-badge.approved {
+  opacity: 0.5;
+}
+
+/* Специальный стиль для статуса "Rejected" с прозрачностью 50% */
+.status-badge.rejected {
+  opacity: 0.5;
+}
+
+/* Центрирование колонки "Status" */
+.cell:has(.status-badge) {
+  text-align: center;
+}
+
+/* Дополнительное правило для центрирования Status колонки */
+.cell .status-badge {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  text-align: center;
+}
+
+/* Альтернативное правило для Status колонки (если :has не поддерживается) */
+.cell[data-column="status"] {
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Дополнительное правило для гарантированного центрирования Status колонки */
+.cell[data-column="status"] .status-badge {
+  margin: 0 auto;
+  display: inline-block;
+}
+
+/* Grid layout для операций (с колонкой статуса) - размеры рассчитываются динамически */
+.rb-panel.operations-mode {
+  /* --cols устанавливается динамически через JavaScript */
+  /* Дополнительные стили для режима операций можно добавить здесь */
+  position: relative; /* минимальное свойство для избежания пустого правила */
+}
+
+/* Убеждаемся, что grid layout корректно применяется для обеих версий */
+.rb-panel .rb-grid {
+  grid-template-columns: var(--cols);
+}
+
+
+
