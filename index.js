@@ -195,11 +195,11 @@ function getTradingStartDate(account) {
 
 // Данные для вкладки "Клиенты и группы"
 let rowsClients = [
-  { name: 'John', account: '35456000', profit: 2, percent: 0, paid: 0, rebateType: null, rebateTypeText: null },
-  { name: 'Anna', account: '55856010', profit: 2, percent: 0, paid: 0, rebateType: null, rebateTypeText: null },
-  { name: 'id948484', account: '95857091', profit: 2, percent: 0, paid: 0, rebateType: null, rebateTypeText: null },
-  { name: 'Mary', account: '43657012', profit: 2, percent: 0, paid: 0, rebateType: null, rebateTypeText: null },
-  { name: 'Peter', account: '54357034', profit: 1, percent: 0, paid: 0, rebateType: null, rebateTypeText: null },
+  { name: 'John', account: '35456000', profit: 35, percent: 0, paid: 0, rebateType: null, rebateTypeText: null },
+  { name: 'Anna', account: '55856010', profit: 567, percent: 0, paid: 0, rebateType: null, rebateTypeText: null },
+  { name: 'id948484', account: '95857091', profit: 134, percent: 0, paid: 0, rebateType: null, rebateTypeText: null },
+  { name: 'Mary', account: '43657012', profit: 2503, percent: 0, paid: 0, rebateType: null, rebateTypeText: null },
+  { name: 'Peter', account: '54357034', profit: 1567, percent: 0, paid: 0, rebateType: null, rebateTypeText: null },
 ];
 
 // Данные для вкладки "Trade Payout Approval" - генерируются динамически
@@ -256,13 +256,15 @@ function generateOperationsFromClients() {
         
         // Используем процент клиента или генерируем случайный
         const percent = client.percent || Math.floor(Math.random() * 25) + 5; // 5-30%
-        const paid = client.profit * (percent / 100);
+        // Генерируем случайный IB Profit от 1 до 40 USD для операций
+        const randomProfit = Math.floor(Math.random() * 40) + 1; // 1-40 USD
+        const paid = randomProfit * (percent / 100);
         
         const operation = {
           id: `${client.name}_${client.account}_${Date.now()}_${Math.random()}`, // Уникальный ID
           name: client.name,
           account: client.account,
-          profit: client.profit,
+          profit: randomProfit, // Используем случайное значение от 1 до 40 USD
           percent: percent,
           paid: paid,
           operationType: client.rebateTypeText || operationType, // Используем тип выплаты клиента
@@ -4791,7 +4793,7 @@ function updateFooter() {
     } else {
       // Для вкладки клиентов - показываем кнопку настройки ребейта
       footerButton.innerHTML = `
-        <button class="rebate-btn">Set Rebate and Groups for clients</button>
+        <button class="rebate-btn">Set Rebate for Groups</button>
       `;
     }
   } else {
