@@ -500,6 +500,17 @@ body {
   margin-top: 4px;
 }
 
+/* Approval type dropdown specific styles */
+.approval-type-dropdown {
+  width: 100%;
+  min-width: 150px;
+}
+
+/* Filter container needs relative positioning for dropdown */
+.filter {
+  position: relative;
+}
+
 .dropdown-option {
   padding: 12px 16px;
   cursor: pointer;
