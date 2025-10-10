@@ -1484,7 +1484,17 @@ function updateTableWithRebateData(selectedType, timeValue, percentValue) {
       rows[rowIndex].rebateType = 'auto';
       rows[rowIndex].rebateTypeText = 'Auto';
       rows[rowIndex].rebateSchedule = timeValue;
-      console.log('Тип установлен: Auto, расписание:', timeValue);
+      
+      // Сохраняем конкретный тип auto режима
+      if (selectedType === 'Auto daily') {
+        rows[rowIndex].autoType = 'auto-daily';
+      } else if (selectedType === 'Auto weekly') {
+        rows[rowIndex].autoType = 'auto-weekly';
+      } else if (selectedType === 'Auto monthly') {
+        rows[rowIndex].autoType = 'auto-monthly';
+      }
+      
+      console.log('Тип установлен: Auto, расписание:', timeValue, 'autoType:', rows[rowIndex].autoType);
     } else {
       console.log('НЕИЗВЕСТНЫЙ ТИП:', selectedType);
       console.log('Проверяем contains Auto:', selectedType.includes('Auto'));
@@ -2810,11 +2820,79 @@ function openRebateModal({ clientName, accountId }) {
       if (typeSelect) {
         typeSelect.querySelector('.select-value').textContent = 'Manual';
         typeSelect.dataset.value = 'manual';
+        // Убираем класс selected у всех опций и добавляем к manual
+        const dropdownOptions = document.querySelectorAll('#rbm-type-dropdown .dropdown-option');
+        dropdownOptions.forEach(option => {
+          option.classList.remove('selected');
+          if (option.dataset.value === 'manual') {
+            option.classList.add('selected');
+          }
+        });
+        
+        // Скрываем поле периода для Manual режима
+        const periodField = document.getElementById('period-field');
+        if (periodField) {
+          periodField.style.display = 'none';
+        }
+        
+        // Скрываем чипсы дней недели для Manual режима
+        const weekChips = document.querySelector('.week-chips');
+        if (weekChips) {
+          weekChips.style.display = 'none';
+        }
       }
     } else if (existingRow.rebateType === 'auto') {
       if (typeSelect) {
-        typeSelect.querySelector('.select-value').textContent = 'Auto daily';
-        typeSelect.dataset.value = 'auto-daily';
+        // Используем сохраненное поле autoType или определяем по rebateSchedule
+        let autoType = existingRow.autoType || 'auto-daily';
+        let autoText = 'Auto daily';
+        
+        // Если autoType не сохранен, определяем по rebateSchedule (для старых данных)
+        if (!existingRow.autoType && existingRow.rebateSchedule) {
+          if (existingRow.rebateSchedule.includes('Monday') || existingRow.rebateSchedule.includes('weekly')) {
+            autoType = 'auto-weekly';
+          } else if (existingRow.rebateSchedule.includes('1st') || existingRow.rebateSchedule.includes('monthly')) {
+            autoType = 'auto-monthly';
+          }
+        }
+        
+        // Устанавливаем правильный текст
+        if (autoType === 'auto-weekly') {
+          autoText = 'Auto weekly';
+        } else if (autoType === 'auto-monthly') {
+          autoText = 'Auto monthly';
+        }
+        
+        typeSelect.querySelector('.select-value').textContent = autoText;
+        typeSelect.dataset.value = autoType;
+        // Убираем класс selected у всех опций и добавляем к правильному типу
+        const dropdownOptions = document.querySelectorAll('#rbm-type-dropdown .dropdown-option');
+        dropdownOptions.forEach(option => {
+          option.classList.remove('selected');
+          if (option.dataset.value === autoType) {
+            option.classList.add('selected');
+          }
+        });
+        
+        // Показываем поле периода для auto режимов
+        const periodField = document.getElementById('period-field');
+        if (periodField) {
+          periodField.style.display = 'block';
+          const periodLabel = periodField.querySelector('.rb-label');
+          if (periodLabel) {
+            periodLabel.style.marginBottom = '6px';
+          }
+        }
+        
+        // Показываем/скрываем чипсы дней недели в зависимости от типа
+        const weekChips = document.querySelector('.week-chips');
+        if (weekChips) {
+          if (autoType === 'auto-weekly') {
+            weekChips.style.display = 'block';
+          } else {
+            weekChips.style.display = 'none';
+          }
+        }
       }
     }
     
@@ -2834,7 +2912,30 @@ function openRebateModal({ clientName, accountId }) {
     }
   } else {
     // Значения по умолчанию для нового клиента
-    if (typeSelect) typeSelect.value = 'manual';
+    if (typeSelect) {
+      typeSelect.querySelector('.select-value').textContent = 'Manual';
+      typeSelect.dataset.value = 'manual';
+      // Убираем класс selected у всех опций и добавляем к manual
+      const dropdownOptions = document.querySelectorAll('#rbm-type-dropdown .dropdown-option');
+      dropdownOptions.forEach(option => {
+        option.classList.remove('selected');
+        if (option.dataset.value === 'manual') {
+          option.classList.add('selected');
+        }
+      });
+      
+      // Скрываем поле периода для Manual режима (по умолчанию)
+      const periodField = document.getElementById('period-field');
+      if (periodField) {
+        periodField.style.display = 'none';
+      }
+      
+      // Скрываем чипсы дней недели для Manual режима (по умолчанию)
+      const weekChips = document.querySelector('.week-chips');
+      if (weekChips) {
+        weekChips.style.display = 'none';
+      }
+    }
     if (percentInput) percentInput.value = '50%';
   }
 
