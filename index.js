@@ -4968,6 +4968,92 @@ document.addEventListener('click', function(e) {
   }
 });
 
+// ===== APPROVAL TYPE DROPDOWN FUNCTIONALITY =====
+// Initialize Approval Type dropdowns
+function initializeApprovalTypeDropdowns() {
+  // Initialize both dropdowns (clients and operations)
+  const dropdowns = [
+    { selectId: 'approval-type-select', dropdownId: 'approval-type-dropdown' },
+    { selectId: 'approval-type-select-operations', dropdownId: 'approval-type-dropdown-operations' }
+  ];
+  
+  dropdowns.forEach(({ selectId, dropdownId }) => {
+    const selectElement = document.getElementById(selectId);
+    const dropdownElement = document.getElementById(dropdownId);
+    
+    if (selectElement && dropdownElement) {
+      // Add click event to show/hide dropdown
+      selectElement.addEventListener('click', function(e) {
+        e.stopPropagation();
+        
+        // Close other dropdowns first
+        closeAllApprovalTypeDropdowns();
+        
+        // Toggle current dropdown
+        if (dropdownElement.style.display === 'none') {
+          dropdownElement.style.display = 'block';
+          selectElement.classList.add('active');
+        } else {
+          dropdownElement.style.display = 'none';
+          selectElement.classList.remove('active');
+        }
+      });
+      
+      // Add click events to dropdown options
+      const options = dropdownElement.querySelectorAll('.dropdown-option');
+      options.forEach(option => {
+        option.addEventListener('click', function(e) {
+          e.stopPropagation();
+          
+          // Update the select value
+          const selectValue = selectElement.querySelector('.select-value');
+          selectValue.textContent = option.textContent;
+          
+          // Update selected state
+          options.forEach(opt => opt.classList.remove('selected'));
+          option.classList.add('selected');
+          
+          // Hide dropdown
+          dropdownElement.style.display = 'none';
+          selectElement.classList.remove('active');
+          
+          console.log('Approval type changed to:', option.dataset.value);
+        });
+      });
+    }
+  });
+  
+  // Close dropdowns when clicking outside
+  document.addEventListener('click', function(e) {
+    if (!e.target.closest('.approval-type-select') && !e.target.closest('.approval-type-dropdown')) {
+      closeAllApprovalTypeDropdowns();
+    }
+  });
+}
+
+// Close all approval type dropdowns
+function closeAllApprovalTypeDropdowns() {
+  const dropdowns = [
+    'approval-type-dropdown',
+    'approval-type-dropdown-operations'
+  ];
+  
+  dropdowns.forEach(dropdownId => {
+    const dropdown = document.getElementById(dropdownId);
+    const select = document.getElementById(dropdownId.replace('-dropdown', '-select'));
+    
+    if (dropdown && select) {
+      dropdown.style.display = 'none';
+      select.classList.remove('active');
+    }
+  });
+}
+
+// Initialize approval type dropdowns when DOM is ready
+document.addEventListener('DOMContentLoaded', function() {
+  initializeApprovalTypeDropdowns();
+});
+
 // Функция для добавления обработчиков кликов к чипсам дней недели
 function addWeekChipsClickHandlers(weekChipsContainer) {
   if (!weekChipsContainer) return;

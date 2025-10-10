@@ -91,11 +91,21 @@
             </div>
             <div class="filter">
               <div class="label">Approval type</div>
-              <div class="select"><span>All types</span><span class="chev icon">
-                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <path d="M12.6654 6L7.9987 10.6667L3.33203 6" stroke="black" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/>
-                </svg>
-              </span></div>
+              <div class="select approval-type-select" id="approval-type-select">
+                <span class="select-value">All types</span>
+                <span class="chev icon">
+                  <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M12.6654 6L7.9987 10.6667L3.33203 6" stroke="black" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/>
+                  </svg>
+                </span>
+              </div>
+              <div class="dropdown-menu approval-type-dropdown" id="approval-type-dropdown" style="display: none;">
+                <div class="dropdown-option" data-value="all">All types</div>
+                <div class="dropdown-option" data-value="manual">Manual</div>
+                <div class="dropdown-option" data-value="auto-daily">Auto daily</div>
+                <div class="dropdown-option" data-value="auto-weekly">Auto weekly</div>
+                <div class="dropdown-option" data-value="auto-monthly">Auto monthly</div>
+              </div>
             </div>
             <div class="filter">
               <div class="label">Rebate %</div>
@@ -134,11 +144,21 @@
             </div>
             <div class="filter">
               <div class="label">Approval type</div>
-              <div class="select"><span>All types</span><span class="chev icon">
-                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <path d="M12.6654 6L7.9987 10.6667L3.33203 6" stroke="black" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/>
-                </svg>
-              </span></div>
+              <div class="select approval-type-select" id="approval-type-select-operations">
+                <span class="select-value">All types</span>
+                <span class="chev icon">
+                  <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M12.6654 6L7.9987 10.6667L3.33203 6" stroke="black" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/>
+                  </svg>
+                </span>
+              </div>
+              <div class="dropdown-menu approval-type-dropdown" id="approval-type-dropdown-operations" style="display: none;">
+                <div class="dropdown-option" data-value="all">All types</div>
+                <div class="dropdown-option" data-value="manual">Manual</div>
+                <div class="dropdown-option" data-value="auto-daily">Auto daily</div>
+                <div class="dropdown-option" data-value="auto-weekly">Auto weekly</div>
+                <div class="dropdown-option" data-value="auto-monthly">Auto monthly</div>
+              </div>
             </div>
             <div class="filter">
               <div class="label">Trade status</div>
