@@ -3014,8 +3014,8 @@ function closeRebateModal() {
 document.addEventListener('DOMContentLoaded', function() {
   const selectType = document.getElementById('rbm-type');
   const dropdownMenu = document.getElementById('rbm-type-dropdown');
-  const selectValue = document.querySelector('.select-value');
-  const dropdownOptions = document.querySelectorAll('.dropdown-option');
+  const selectValue = selectType.querySelector('.select-value');
+  const dropdownOptions = dropdownMenu.querySelectorAll('.dropdown-option');
 
   if (!selectType || !dropdownMenu || !selectValue) return;
 
@@ -5002,22 +5002,30 @@ function initializeApprovalTypeDropdowns() {
       // Add click events to dropdown options
       const options = dropdownElement.querySelectorAll('.dropdown-option');
       options.forEach(option => {
-        option.addEventListener('click', function(e) {
+        // Удаляем старые обработчики если они есть
+        const newOption = option.cloneNode(true);
+        option.parentNode.replaceChild(newOption, option);
+        
+        // Добавляем новый обработчик только к текущему dropdown
+        newOption.addEventListener('click', function(e) {
           e.stopPropagation();
           
           // Update the select value
           const selectValue = selectElement.querySelector('.select-value');
-          selectValue.textContent = option.textContent;
+          if (selectValue) {
+            selectValue.textContent = newOption.textContent;
+          }
           
-          // Update selected state
-          options.forEach(opt => opt.classList.remove('selected'));
-          option.classList.add('selected');
+          // Update selected state - ТОЛЬКО в текущем dropdown
+          const currentDropdownOptions = dropdownElement.querySelectorAll('.dropdown-option');
+          currentDropdownOptions.forEach(opt => opt.classList.remove('selected'));
+          newOption.classList.add('selected');
           
           // Hide dropdown
           dropdownElement.style.display = 'none';
           selectElement.classList.remove('active');
           
-          console.log('Approval type changed to:', option.dataset.value);
+          console.log('Approval type changed to:', newOption.dataset.value, 'for dropdown:', dropdownId);
         });
       });
     }
