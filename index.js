@@ -2336,44 +2336,6 @@ document.addEventListener('DOMContentLoaded', function() {
     }
   });
 
-  // Обработчик кнопки "Confirm"
-  function handleSubmitClick(e) {
-    console.log('=== КНОПКА ПОДТВЕРДИТЬ НАЖАТА ===');
-    console.log('Event:', e);
-    
-    const raw = (percentInput.value || '').trim();
-    const num = parseFloat(raw.replace('%',''));
-    if (Number.isNaN(num) || num < 0 || num > 100) {
-      console.log('Ошибка валидации процента:', raw);
-      percentInput.focus();
-      percentInput.select();
-      return;
-    }
-    
-    // Получаем данные из модального окна
-    const selectedType = typeSelect.querySelector('.select-value').textContent;
-    const timeField = document.getElementById('rbm-time');
-    const timeValue = timeField ? timeField.value : '';
-    const percentValue = raw;
-    
-    console.log('Данные из модального окна:', {
-      selectedType,
-      timeValue,
-      percentValue
-    });
-    
-    // Обновляем данные в таблице
-    console.log('Вызываем updateTableWithRebateData...');
-    updateTableWithRebateData(selectedType, timeValue, percentValue);
-    
-    const payload = {
-      type: typeSelect.value,   // 'manual' | 'auto'
-      percent: num / 100        // 0..1
-    };
-    console.log('Rebate settings submitted:', payload);
-
-    closeRebateModal();
-  }
 
   // Функция для обновления текста с ближайшей выплатой
   function updateNextPayoutText() {
@@ -2469,141 +2431,7 @@ document.addEventListener('DOMContentLoaded', function() {
   // Делаем функцию доступной глобально для отладки
   window.updateNextPayoutText = updateNextPayoutText;
 
-  function openRebateModal({ clientName, accountId }) {
-    console.log('=== ВЫЗОВ openRebateModal ===');
-    console.log('Modal element:', modal);
-    console.log('Modal exists:', !!modal);
-    
-    if (!modal) {
-      console.error('Модальное окно не найдено!');
-      return;
-    }
 
-    console.log('=== ОТКРЫТИЕ МОДАЛЬНОГО ОКНА ===');
-    console.log('Opening modal for:', { clientName, accountId });
-    console.log('Тип clientName:', typeof clientName);
-    console.log('Длина clientName:', clientName.length);
-    console.log('clientName charCodeAt(0):', clientName.charCodeAt(0));
-    
-    // Сохраняем текущего клиента в глобальной переменной
-    currentModalClient = clientName;
-    console.log('Текущий клиент в модальном окне установлен:', currentModalClient);
-
-    // Проверяем, есть ли уже данные для этого клиента
-    const existingRow = rows.find(r => r.name === clientName);
-    console.log('Существующие данные для клиента:', existingRow);
-    
-    if (existingRow) {
-      console.log('Найдены существующие данные:', {
-        rebateType: existingRow.rebateType,
-        rebateTypeText: existingRow.rebateTypeText,
-        percent: existingRow.percent,
-        rebateSchedule: existingRow.rebateSchedule
-      });
-    }
-
-    // динамические тексты
-    titleEl.textContent = `Set Rebate Sharing for ${clientName}`;
-    clientSpan.textContent = clientName;
-    
-    console.log('Имя клиента в модальном окне установлено:', clientName);
-    console.log('clientSpan.textContent после установки:', clientSpan.textContent);
-
-    // значения по умолчанию или существующие данные
-    if (existingRow && existingRow.rebateType) {
-      // Предзаполняем модальное окно существующими данными
-      console.log('Предзаполняем модальное окно существующими данными');
-      
-      // Устанавливаем тип выплаты
-      if (existingRow.rebateType === 'manual') {
-        typeSelect.querySelector('.select-value').textContent = 'Manual';
-        typeSelect.dataset.value = 'manual';
-      } else if (existingRow.rebateType === 'auto') {
-        typeSelect.querySelector('.select-value').textContent = 'Auto daily';
-        typeSelect.dataset.value = 'auto-daily';
-      }
-      
-      // Устанавливаем процент
-      if (existingRow.percent) {
-        percentInput.value = `${existingRow.percent}%`;
-      } else {
-        percentInput.value = '50%';
-      }
-      
-      // Устанавливаем время для авто-режима
-      if (existingRow.rebateSchedule) {
-        const timeField = document.getElementById('rbm-time');
-        if (timeField) {
-          timeField.value = existingRow.rebateSchedule;
-        }
-      }
-    } else {
-      // Значения по умолчанию для нового клиента
-      typeSelect.value = 'manual';
-      percentInput.value = '50%';
-    }
-
-    // обновляем текст с ближайшей выплатой
-    const timeHint = document.getElementById('rbm-time-hint');
-    if (timeHint) {
-      // Добавляем небольшую задержку, чтобы элементы успели инициализироваться
-      setTimeout(() => {
-        updateNextPayoutText();
-      }, 100);
-    }
-
-    // показать модалку
-    modal.style.display = 'block';
-    modal.setAttribute('aria-hidden', 'false');
-    lastActiveEl = document.activeElement;
-
-    // блокируем скролл страницы
-    document.documentElement.style.overflow = 'hidden';
-
-    // фокус внутрь
-    dialog.focus();
-
-    // фокус-трап
-    trapFocus(dialog);
-    
-    // Добавляем обработчик кнопки "Confirm" после открытия модального окна
-    const submitBtnInModal = modal.querySelector('#rbm-submit');
-    if (submitBtnInModal) {
-      console.log('Кнопка "Confirm" найдена в модальном окне:', submitBtnInModal);
-      // Удаляем старый обработчик если есть
-      submitBtnInModal.removeEventListener('click', handleSubmitClick);
-      // Добавляем новый обработчик
-      submitBtnInModal.addEventListener('click', handleSubmitClick);
-    } else {
-      console.error('Кнопка "Confirm" не найдена в модальном окне!');
-    }
-  }
-
-  function closeRebateModal() {
-    if (!modal) return;
-    
-    // Очищаем глобальную переменную текущего клиента
-    currentModalClient = null;
-    console.log('Модальное окно закрыто, currentModalClient очищен');
-    
-    // Сначала убираем фокус с активного элемента
-    if (document.activeElement && document.activeElement.blur) {
-      document.activeElement.blur();
-    }
-    
-    // Затем скрываем модальное окно
-    modal.style.display = 'none';
-    modal.setAttribute('aria-hidden', 'true');
-    document.documentElement.style.overflow = ''; // вернуть скролл
-    
-    // Возвращаем фокус на предыдущий элемент
-    if (lastActiveEl && lastActiveEl.focus) {
-      // Небольшая задержка, чтобы убедиться, что модальное окно полностью скрыто
-      setTimeout(() => {
-        lastActiveEl.focus();
-      }, 0);
-    }
-  }
 
   modal.addEventListener('click', (e) => {
     if (e.target.closest('[data-close]')) { closeRebateModal(); }
@@ -2658,22 +2486,6 @@ document.addEventListener('DOMContentLoaded', function() {
   });
   */
 
-  // фокус-трап внутри диалога
-  function trapFocus(container) {
-    const FOCUSABLE = 'a[href],button:not([disabled]),input,select,textarea,[tabindex]:not([tabindex="-1"])';
-    let nodes = Array.from(container.querySelectorAll(FOCUSABLE));
-    if (!nodes.length) return;
-    const first = nodes[0], last = nodes[nodes.length - 1];
-
-    function onKey(e) {
-      if (e.key !== 'Tab') return;
-      nodes = Array.from(container.querySelectorAll(FOCUSABLE));
-      const active = document.activeElement;
-      if (e.shiftKey && active === first) { e.preventDefault(); last.focus(); }
-      else if (!e.shiftKey && active === last) { e.preventDefault(); first.focus(); }
-    }
-    container.addEventListener('keydown', onKey);
-  }
 });
 
 // ===== end rebate modal =====
@@ -2766,6 +2578,80 @@ function handleBulkSetPending() {
   console.log('Массовое установление pending завершено');
 }
 
+// Функция для фокус-трапа внутри диалога
+function trapFocus(container) {
+  const FOCUSABLE = 'a[href],button:not([disabled]),input,select,textarea,[tabindex]:not([tabindex="-1"])';
+  let nodes = Array.from(container.querySelectorAll(FOCUSABLE));
+  if (!nodes.length) return;
+  const first = nodes[0], last = nodes[nodes.length - 1];
+
+  function onKey(e) {
+    if (e.key !== 'Tab') return;
+    nodes = Array.from(container.querySelectorAll(FOCUSABLE));
+    const active = document.activeElement;
+    if (e.shiftKey && active === first) { e.preventDefault(); last.focus(); }
+    else if (!e.shiftKey && active === last) { e.preventDefault(); first.focus(); }
+  }
+  container.addEventListener('keydown', onKey);
+}
+
+// Обработчик кнопки "Confirm"
+function handleSubmitClick(e) {
+  console.log('=== КНОПКА ПОДТВЕРДИТЬ НАЖАТА ===');
+  console.log('Event:', e);
+  
+  // Получаем элементы напрямую из DOM
+  const modal = document.getElementById('rebate-modal');
+  const percentInput = modal?.querySelector('#rbm-percent input');
+  const typeSelect = modal?.querySelector('#rbm-type');
+  
+  console.log('percentInput:', percentInput);
+  console.log('typeSelect:', typeSelect);
+  
+  if (!percentInput) {
+    console.error('percentInput не найден!');
+    return;
+  }
+  
+  if (!typeSelect) {
+    console.error('typeSelect не найден!');
+    return;
+  }
+  
+  const raw = (percentInput.value || '').trim();
+  const num = parseFloat(raw.replace('%',''));
+  if (Number.isNaN(num) || num < 0 || num > 100) {
+    console.log('Ошибка валидации процента:', raw);
+    percentInput.focus();
+    percentInput.select();
+    return;
+  }
+  
+  // Получаем данные из модального окна
+  const selectedType = typeSelect.querySelector('.select-value').textContent;
+  const timeField = document.getElementById('rbm-time');
+  const timeValue = timeField ? timeField.value : '';
+  const percentValue = raw;
+  
+  console.log('Данные из модального окна:', {
+    selectedType,
+    timeValue,
+    percentValue
+  });
+  
+  // Обновляем данные в таблице
+  console.log('Вызываем updateTableWithRebateData...');
+  updateTableWithRebateData(selectedType, timeValue, percentValue);
+  
+  const payload = {
+    type: typeSelect.dataset.value || 'manual',   // 'manual' | 'auto'
+    percent: num / 100        // 0..1
+  };
+  console.log('Rebate settings submitted:', payload);
+
+  closeRebateModal();
+}
+
 // Выносим функции модального окна в глобальную область видимости
 function openRebateModal({ clientName, accountId }) {
   console.log('=== ВЫЗОВ openRebateModal ===');
@@ -2811,7 +2697,7 @@ function openRebateModal({ clientName, accountId }) {
 
   // значения по умолчанию или существующие данные
   const typeSelect = modal.querySelector('#rbm-type');
-  const percentInput = modal.querySelector('#rbm-time');
+  const percentInput = modal.querySelector('#rbm-percent input');
   
   if (existingRow && existingRow.rebateType) {
     // Предзаполняем модальное окно существующими данными
@@ -2976,10 +2862,19 @@ function openRebateModal({ clientName, accountId }) {
   const submitBtnInModal = modal.querySelector('#rbm-submit');
   if (submitBtnInModal) {
     console.log('Кнопка "Confirm" найдена в модальном окне:', submitBtnInModal);
-    // Удаляем старый обработчик если есть
-    submitBtnInModal.removeEventListener('click', handleSubmitClick);
+    console.log('handleSubmitClick функция:', handleSubmitClick);
+    
+    // Удаляем все старые обработчики
+    const newSubmitBtn = submitBtnInModal.cloneNode(true);
+    submitBtnInModal.parentNode.replaceChild(newSubmitBtn, submitBtnInModal);
+    
     // Добавляем новый обработчик
-    submitBtnInModal.addEventListener('click', handleSubmitClick);
+    newSubmitBtn.addEventListener('click', function(e) {
+      console.log('=== КНОПКА CONFIRM НАЖАТА ===');
+      console.log('Event:', e);
+      handleSubmitClick(e);
+    });
+    console.log('Обработчик кнопки добавлен');
   } else {
     console.error('Кнопка "Confirm" не найдена в модальном окне!');
   }
@@ -3014,8 +2909,8 @@ function closeRebateModal() {
 document.addEventListener('DOMContentLoaded', function() {
   const selectType = document.getElementById('rbm-type');
   const dropdownMenu = document.getElementById('rbm-type-dropdown');
-  const selectValue = document.querySelector('.select-value');
-  const dropdownOptions = document.querySelectorAll('.dropdown-option');
+  const selectValue = selectType.querySelector('.select-value');
+  const dropdownOptions = dropdownMenu.querySelectorAll('.dropdown-option');
 
   if (!selectType || !dropdownMenu || !selectValue) return;
 
@@ -5002,22 +4897,30 @@ function initializeApprovalTypeDropdowns() {
       // Add click events to dropdown options
       const options = dropdownElement.querySelectorAll('.dropdown-option');
       options.forEach(option => {
-        option.addEventListener('click', function(e) {
+        // Удаляем старые обработчики если они есть
+        const newOption = option.cloneNode(true);
+        option.parentNode.replaceChild(newOption, option);
+        
+        // Добавляем новый обработчик только к текущему dropdown
+        newOption.addEventListener('click', function(e) {
           e.stopPropagation();
           
           // Update the select value
           const selectValue = selectElement.querySelector('.select-value');
-          selectValue.textContent = option.textContent;
+          if (selectValue) {
+            selectValue.textContent = newOption.textContent;
+          }
           
-          // Update selected state
-          options.forEach(opt => opt.classList.remove('selected'));
-          option.classList.add('selected');
+          // Update selected state - ТОЛЬКО в текущем dropdown
+          const currentDropdownOptions = dropdownElement.querySelectorAll('.dropdown-option');
+          currentDropdownOptions.forEach(opt => opt.classList.remove('selected'));
+          newOption.classList.add('selected');
           
           // Hide dropdown
           dropdownElement.style.display = 'none';
           selectElement.classList.remove('active');
           
-          console.log('Approval type changed to:', option.dataset.value);
+          console.log('Approval type changed to:', newOption.dataset.value, 'for dropdown:', dropdownId);
         });
       });
     }
